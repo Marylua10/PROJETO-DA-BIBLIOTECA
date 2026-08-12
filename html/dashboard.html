@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Início | ToschiBook</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body class="dashboard-body">
+
+    <div class="dashboard-layout">
+
+        <!-- Barra lateral -->
+        <aside class="sidebar">
+            <div class="sidebar-brand logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 64 64" aria-hidden="true">
+                        <path d="M10 12h29c8 0 15 7 15 15v27H25c-8 0-15-6-15-14V12Z"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="4"
+                              stroke-linejoin="round"/>
+                        <path d="M25 54V27c0-8 6-15 14-15"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="4"
+                              stroke-linecap="round"/>
+                        <path d="M39 12c0 8 6 15 15 15"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="4"
+                              stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <span>Toschi<span>Book</span></span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item active" aria-current="page">
+                    <span class="nav-icon">🏠</span>
+                    Início
+                </a>
+                <a href="livros.html" class="nav-item">
+                    <span class="nav-icon">📚</span>
+                    Livros
+                </a>
+                <a href="usuarios.html" class="nav-item">
+                    <span class="nav-icon">👥</span>
+                    Usuários
+                </a>
+                <a href="emprestimos.html" class="nav-item">
+                    <span class="nav-icon">🔁</span>
+                    Empréstimos
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="admin-chip">
+                    <span class="admin-avatar">A</span>
+                    <div class="admin-info">
+                        <strong>Administrador</strong>
+                        <small>Biblioteca</small>
+                    </div>
+                </div>
+
+                <a href="index.html" class="logout-link" id="logoutLink">
+                    <span class="nav-icon">⎋</span>
+                    Sair
+                </a>
+            </div>
+        </aside>
+
+        <!-- Conteúdo principal -->
+        <div class="dashboard-main">
+
+            <header class="topbar">
+                <div class="topbar-title">
+                    <h1>Início</h1>
+                    <p id="todayDate">Carregando data...</p>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="refresh-button" id="refreshButton" type="button">
+                        ↻ Atualizar
+                    </button>
+                </div>
+            </header>
+
+            <!-- Cards de estatísticas -->
+            <section class="stats-grid" aria-label="Estatísticas da biblioteca">
+                <article class="stat-card">
+                    <div class="stat-icon stat-icon-green">📚</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Livros no acervo</span>
+                        <strong class="stat-value" id="statLivros">—</strong>
+                    </div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-icon stat-icon-blue">👥</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Usuários cadastrados</span>
+                        <strong class="stat-value" id="statUsuarios">—</strong>
+                    </div>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-icon stat-icon-yellow">🔁</div>
+                    <div class="stat-info">
+                        <span class="stat-label">Empréstimos ativos</span>
+                        <strong class="stat-value" id="statEmprestimos">—</strong>
+                    </div>
+                </article>
+            </section>
+
+            <!-- Conteúdo dinâmico -->
+            <section class="content-grid">
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>Empréstimos ativos</h2>
+                        <span class="panel-badge" id="emprestimosCount">0</span>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="empty-state" id="emprestimosEmpty" hidden>
+                            <span class="empty-icon">📭</span>
+                            <p>Nenhum empréstimo ativo no momento.</p>
+                        </div>
+
+                        <div class="table-wrapper">
+                            <table class="data-table" id="emprestimosTable" hidden>
+                                <thead>
+                                    <tr>
+                                        <th>Livro</th>
+                                        <th>Aluno</th>
+                                        <th>Turma</th>
+                                        <th>Data</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="emprestimosBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>Acervo recente</h2>
+                        <span class="panel-badge" id="livrosCount">0</span>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="empty-state" id="livrosEmpty" hidden>
+                            <span class="empty-icon">📚</span>
+                            <p>Nenhum livro cadastrado ainda.</p>
+                        </div>
+
+                        <ul class="book-list" id="livrosList"></ul>
+                    </div>
+                </div>
+
+            </section>
+
+        </div>
+
+    </div>
+
+    <script src="/javascript/api.js"></script>
+    <script src="/javascript/dashboard.js"></script>
+</body>
+</html>

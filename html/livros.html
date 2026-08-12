@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Livros | ToschiBook</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/paginas.css">
+</head>
+<body class="dashboard-body">
+
+    <div class="dashboard-layout">
+
+        <!-- Barra lateral -->
+        <aside class="sidebar">
+            <div class="sidebar-brand logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 64 64" aria-hidden="true">
+                        <path d="M10 12h29c8 0 15 7 15 15v27H25c-8 0-15-6-15-14V12Z"
+                              fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+                        <path d="M25 54V27c0-8 6-15 14-15"
+                              fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                        <path d="M39 12c0 8 6 15 15 15"
+                              fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <span>Toschi<span>Book</span></span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <span class="nav-icon">🏠</span>
+                    Início
+                </a>
+                <a href="livros.html" class="nav-item active" aria-current="page">
+                    <span class="nav-icon">📚</span>
+                    Livros
+                </a>
+                <a href="usuarios.html" class="nav-item">
+                    <span class="nav-icon">👥</span>
+                    Usuários
+                </a>
+                <a href="emprestimos.html" class="nav-item">
+                    <span class="nav-icon">🔁</span>
+                    Empréstimos
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="admin-chip">
+                    <span class="admin-avatar">A</span>
+                    <div class="admin-info">
+                        <strong>Administrador</strong>
+                        <small>Biblioteca</small>
+                    </div>
+                </div>
+
+                <a href="index.html" class="logout-link">
+                    <span class="nav-icon">⎋</span>
+                    Sair
+                </a>
+            </div>
+        </aside>
+
+        <!-- Conteúdo principal -->
+        <div class="dashboard-main">
+
+            <header class="topbar">
+                <div class="topbar-title">
+                    <h1>Livros</h1>
+                    <p>Gerencie o acervo da biblioteca</p>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="btn btn-primary" id="btnNovoLivro" type="button">
+                        ＋ Novo livro
+                    </button>
+                </div>
+            </header>
+
+            <div class="page-toolbar">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input
+                        type="search"
+                        id="buscaLivro"
+                        placeholder="Buscar por título ou autor..."
+                        autocomplete="off"
+                    >
+                </div>
+
+                <span class="panel-badge" id="livrosCount">0 registros</span>
+            </div>
+
+            <div class="panel">
+                <div class="panel-body panel-body-tight">
+                    <div class="empty-state" id="livrosEmpty" hidden>
+                        <span class="empty-icon">📚</span>
+                        <p>Nenhum livro encontrado.</p>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table class="data-table" id="livrosTable" hidden>
+                            <thead>
+                                <tr>
+                                    <th>Título</th>
+                                    <th>Autor</th>
+                                    <th>Ano</th>
+                                    <th>Categoria</th>
+                                    <th>Exemplares</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="livrosBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Modal de cadastro/edição -->
+    <div class="modal-overlay" id="modalLivro" hidden>
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
+            <div class="modal-header">
+                <h2 id="modalTitulo">Novo livro</h2>
+                <button class="modal-close" id="fecharModal" type="button" aria-label="Fechar">×</button>
+            </div>
+
+            <div class="modal-body">
+                <form id="formLivro" novalidate>
+                    <input type="hidden" id="livroId">
+
+                    <div class="form-grid">
+                        <div class="form-group full">
+                            <label for="titulo">Título</label>
+                            <input type="text" id="titulo" placeholder="Título do livro" required>
+                        </div>
+
+                        <div class="form-group full">
+                            <label for="autor">Autor</label>
+                            <input type="text" id="autor" placeholder="Nome do autor" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ano">Ano</label>
+                            <input type="number" id="ano" placeholder="Ex.: 2020" min="0" max="2100">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="quantidade">Quantidade</label>
+                            <input type="number" id="quantidade" placeholder="1" min="1">
+                        </div>
+
+                        <div class="form-group full">
+                            <label for="categoria">Categoria</label>
+                            <input type="text" id="categoria" placeholder="Ex.: Ficção, Didático...">
+                        </div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelarModal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" id="salvarLivro">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/javascript/api.js"></script>
+    <script src="/javascript/livros.js"></script>
+</body>
+</html>

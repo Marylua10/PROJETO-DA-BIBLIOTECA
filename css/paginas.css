@@ -1,0 +1,279 @@
+/* ===== Componentes das páginas de gestão ToschiBook ===== */
+
+/* --- Barra de ferramentas (busca + ação) --- */
+
+.page-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.search-box {
+    position: relative;
+    flex: 1;
+    max-width: 420px;
+}
+
+.search-box input {
+    width: 100%;
+    height: 44px;
+    padding: 0 16px 0 42px;
+    border: 1px solid var(--border-color);
+    border-radius: 9px;
+    outline: none;
+    color: var(--text-color);
+    background: var(--white);
+    font-size: 14px;
+    transition: 0.2s ease;
+}
+
+.search-box input::placeholder {
+    color: #a0ada5;
+}
+
+.search-box input:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 4px rgba(22, 115, 74, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-green);
+    font-size: 15px;
+}
+
+/* --- Botões --- */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 20px;
+    border-radius: 9px;
+    font-size: 14px;
+    font-weight: 700;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.btn-primary {
+    color: var(--white);
+    background: var(--primary-green);
+}
+
+.btn-primary:hover {
+    background: var(--dark-green);
+    transform: translateY(-1px);
+    box-shadow: 0 7px 16px rgba(22, 115, 74, 0.2);
+}
+
+.btn-secondary {
+    color: var(--primary-green);
+    background: var(--white);
+    border-color: var(--border-color);
+}
+
+.btn-secondary:hover {
+    border-color: var(--primary-green);
+}
+
+.btn-danger {
+    color: var(--error-color);
+    background: #fdf0ee;
+}
+
+.btn-danger:hover {
+    background: #fbded9;
+}
+
+.btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.btn-small {
+    padding: 7px 13px;
+    font-size: 12px;
+    border-radius: 7px;
+}
+
+/* --- Tabela com ações --- */
+
+.table-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+/* --- Modal --- */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+    background: rgba(13, 79, 53, 0.45);
+}
+
+.modal-overlay[hidden] {
+    display: none;
+}
+
+.modal {
+    width: min(100%, 520px);
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    border-radius: 13px;
+    background: var(--white);
+    box-shadow: 0 18px 50px rgba(13, 79, 53, 0.3);
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h2 {
+    color: var(--dark-green);
+    font-size: 19px;
+}
+
+.modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border: 0;
+    border-radius: 8px;
+    color: var(--muted-color);
+    background: transparent;
+    font-size: 22px;
+    line-height: 1;
+    transition: 0.2s ease;
+}
+
+.modal-close:hover {
+    color: var(--error-color);
+    background: #fdf0ee;
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 18px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group.full {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    height: 46px;
+    padding: 0 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    outline: none;
+    color: var(--text-color);
+    background: var(--white);
+    font: inherit;
+    font-size: 14px;
+    transition: 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 4px rgba(22, 115, 74, 0.1);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 8px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* --- Estados da tabela --- */
+
+.panel-body-tight {
+    padding: 0;
+}
+
+/* --- Badge de status --- */
+
+.badge-status {
+    display: inline-block;
+    padding: 4px 11px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.badge-status.ativo {
+    color: var(--primary-green);
+    background: var(--light-green);
+}
+
+/* --- Select de empréstimo vazio (sem opções) --- */
+
+.select-hint {
+    margin-top: -6px;
+    color: var(--muted-color);
+    font-size: 12px;
+}
+
+/* --- Responsividade --- */
+
+@media (max-width: 720px) {
+    .page-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-box {
+        max-width: none;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .modal body {
+        padding: 18px;
+    }
+}
