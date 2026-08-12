@@ -1,0 +1,182 @@
+const registerForm = document.getElementById("registerForm");
+
+const nameInput = document.getElementById("name");
+const usernameInput = document.getElementById("username");
+const emailInput = document.getElementById("email");
+const registrationInput = document.getElementById("registration");
+const passwordInput = document.getElementById("password");
+const confirmPasswordInput = document.getElementById("confirmPassword");
+const termsInput = document.getElementById("terms");
+
+const registerButton = document.getElementById("registerButton");
+const statusMessage = document.getElementById("statusMessage");
+const currentYear = document.getElementById("currentYear");
+
+currentYear.textContent = new Date().getFullYear();
+
+function showError(input, message) {
+    input.classList.add("input-error");
+
+    const errorElement = document.getElementById(`${input.id}Error`);
+
+    if (errorElement) {
+        errorElement.textContent = message;
+    }
+}
+
+function clearError(input) {
+    input.classList.remove("input-error");
+
+    const errorElement = document.getElementById(`${input.id}Error`);
+
+    if (errorElement) {
+        errorElement.textContent = "";
+    }
+}
+
+function setStatus(message, type) {
+    statusMessage.textContent = message;
+    statusMessage.className = `status-message ${type}`;
+}
+
+function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function validateForm() {
+    let isValid = true;
+
+    const fields = [
+        nameInput,
+        usernameInput,
+        emailInput,
+        registrationInput,
+        passwordInput,
+        confirmPasswordInput
+    ];
+
+    fields.forEach(clearError);
+
+    document.getElementById("termsError").textContent = "";
+    setStatus("", "");
+
+    if (nameInput.value.trim().length < 3) {
+        showError(nameInput, "Digite seu nome completo.");
+        isValid = false;
+    }
+
+    if (usernameInput.value.trim().length < 3) {
+        showError(usernameInput, "Informe um usuário válido.");
+        isValid = false;
+    }
+
+    if (!validateEmail(emailInput.value.trim())) {
+        showError(emailInput, "Digite um e-mail válido.");
+        isValid = false;
+    }
+
+    if (registrationInput.value.trim() === "") {
+        showError(registrationInput, "Informe sua matrícula ou código.");
+        isValid = false;
+    }
+
+    if (passwordInput.value.length < 6) {
+        showError(
+            passwordInput,
+            "A senha deve ter pelo menos 6 caracteres."
+        );
+        isValid = false;
+    }
+
+    if (confirmPasswordInput.value !== passwordInput.value) {
+        showError(
+            confirmPasswordInput,
+            "As senhas não coincidem."
+        );
+        isValid = false;
+    }
+
+    if (!termsInput.checked) {
+        document.getElementById("termsError").textContent =
+            "Você precisa aceitar os termos de uso.";
+        isValid = false;
+    }
+
+    return isValid;
+}
+
+document.querySelectorAll(".show-password").forEach((button) => {
+    button.addEventListener("click", () => {
+        const targetId = button.dataset.target;
+        const targetInput = document.getElementById(targetId);
+
+        const isPassword = targetInput.type === "password";
+
+        targetInput.type = isPassword ? "text" : "password";
+        button.textContent = isPassword ? "Ocultar" : "Mostrar";
+    });
+});
+
+registerForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    if (!validateForm()) {
+        setStatus("Verifique os dados informados.", "error");
+        return;
+    }
+
+    registerButton.disabled = true;
+    registerButton.classList.add("loading");
+
+    /*
+     * Simulação de cadastro.
+     * Substitua este trecho pela chamada da API do sistema.
+     *
+     * Exemplo:
+     *
+     * fetch("/api/cadastro", {
+     *     method: "POST",
+     *     headers: {
+     *         "Content-Type": "application/json"
+     *     },
+     *     body: JSON.stringify({
+     *         nome: nameInput.value,
+     *         usuario: usernameInput.value,
+     *         email: emailInput.value,
+     *         matricula: registrationInput.value,
+     *         senha: passwordInput.value
+     *     })
+     * });
+     */
+
+    setTimeout(() => {
+        registerButton.disabled = false;
+        registerButton.classList.remove("loading");
+
+        setStatus(
+            "Cadastro realizado com sucesso!",
+            "success"
+        );
+
+        registerForm.reset();
+    }, 1200);
+});
+
+[
+    nameInput,
+    usernameInput,
+    emailInput,
+    registrationInput,
+    passwordInput,
+    confirmPasswordInput
+].forEach((input) => {
+    input.addEventListener("input", () => {
+        clearError(input);
+        setStatus("", "");
+    });
+});
+
+termsInput.addEventListener("change", () => {
+    document.getElementById("termsError").textContent = "";
+    setStatus("", "");
+});

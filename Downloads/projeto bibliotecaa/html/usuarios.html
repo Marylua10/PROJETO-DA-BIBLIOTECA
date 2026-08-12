@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Usuários | ToschiBook</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/paginas.css">
+</head>
+<body class="dashboard-body">
+
+    <div class="dashboard-layout">
+
+        <!-- Barra lateral -->
+        <aside class="sidebar">
+            <div class="sidebar-brand logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 64 64" aria-hidden="true">
+                        <path d="M10 12h29c8 0 15 7 15 15v27H25c-8 0-15-6-15-14V12Z"
+                              fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+                        <path d="M25 54V27c0-8 6-15 14-15"
+                              fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                        <path d="M39 12c0 8 6 15 15 15"
+                              fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <span>Toschi<span>Book</span></span>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <span class="nav-icon">🏠</span>
+                    Início
+                </a>
+                <a href="livros.html" class="nav-item">
+                    <span class="nav-icon">📚</span>
+                    Livros
+                </a>
+                <a href="usuarios.html" class="nav-item active" aria-current="page">
+                    <span class="nav-icon">👥</span>
+                    Usuários
+                </a>
+                <a href="emprestimos.html" class="nav-item">
+                    <span class="nav-icon">🔁</span>
+                    Empréstimos
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="admin-chip">
+                    <span class="admin-avatar">A</span>
+                    <div class="admin-info">
+                        <strong>Administrador</strong>
+                        <small>Biblioteca</small>
+                    </div>
+                </div>
+
+                <a href="index.html" class="logout-link">
+                    <span class="nav-icon">⎋</span>
+                    Sair
+                </a>
+            </div>
+        </aside>
+
+        <!-- Conteúdo principal -->
+        <div class="dashboard-main">
+
+            <header class="topbar">
+                <div class="topbar-title">
+                    <h1>Usuários</h1>
+                    <p>Gerencie os alunos cadastrados</p>
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="btn btn-primary" id="btnNovoUsuario" type="button">
+                        ＋ Novo usuário
+                    </button>
+                </div>
+            </header>
+
+            <div class="page-toolbar">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input
+                        type="search"
+                        id="buscaUsuario"
+                        placeholder="Buscar por nome ou matrícula..."
+                        autocomplete="off"
+                    >
+                </div>
+
+                <span class="panel-badge" id="usuariosCount">0 registros</span>
+            </div>
+
+            <div class="panel">
+                <div class="panel-body panel-body-tight">
+                    <div class="empty-state" id="usuariosEmpty" hidden>
+                        <span class="empty-icon">👥</span>
+                        <p>Nenhum usuário encontrado.</p>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table class="data-table" id="usuariosTable" hidden>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>E-mail</th>
+                                    <th>Matrícula</th>
+                                    <th>Turma</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usuariosBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Modal de cadastro/edição -->
+    <div class="modal-overlay" id="modalUsuario" hidden>
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
+            <div class="modal-header">
+                <h2 id="modalTitulo">Novo usuário</h2>
+                <button class="modal-close" id="fecharModal" type="button" aria-label="Fechar">×</button>
+            </div>
+
+            <div class="modal-body">
+                <form id="formUsuario" novalidate>
+                    <input type="hidden" id="usuarioId">
+
+                    <div class="form-grid">
+                        <div class="form-group full">
+                            <label for="nome">Nome completo</label>
+                            <input type="text" id="nome" placeholder="Nome do aluno" required>
+                        </div>
+
+                        <div class="form-group full">
+                            <label for="email">E-mail</label>
+                            <input type="email" id="email" placeholder="email@exemplo.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="matricula">Matrícula</label>
+                            <input type="text" id="matricula" placeholder="Nº da matrícula" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="turma">Turma</label>
+                            <input type="text" id="turma" placeholder="Ex.: 3º A">
+                        </div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelarModal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" id="salvarUsuario">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/javascript/api.js"></script>
+    <script src="/javascript/usuarios.js"></script>
+</body>
+</html>

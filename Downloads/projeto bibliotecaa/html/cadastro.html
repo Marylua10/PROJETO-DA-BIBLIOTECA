@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cadastro | ToschiBook</title>
+
+    <link rel="stylesheet" href="/css/cadastro.css">
+</head>
+<body>
+
+    <main class="register-page">
+
+        <section class="brand-panel">
+            <div class="brand-content">
+
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 64 64" aria-hidden="true">
+                            <path
+                                d="M10 12h29c8 0 15 7 15 15v27H25c-8 0-15-6-15-14V12Z"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="4"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M25 54V27c0-8 6-15 14-15"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="4"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M39 12c0 8 6 15 15 15"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="4"
+                                stroke-linecap="round"
+                            />
+                        </svg>
+                    </div>
+
+                    <span>Toschi<span>Book</span></span>
+                </div>
+
+                <div class="welcome-text">
+                    <h1>Faça parte do ToschiBook</h1>
+
+                    <p>
+                        Crie seu acesso para consultar livros, acompanhar empréstimos
+                        e aproveitar todos os recursos da biblioteca.
+                    </p>
+                </div>
+
+                <div class="books-decoration">
+                    <span class="book book-one"></span>
+                    <span class="book book-two"></span>
+                    <span class="book book-three"></span>
+                    <span class="book book-four"></span>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="form-panel">
+            <div class="register-card">
+
+                <div class="mobile-logo logo">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 64 64" aria-hidden="true">
+                            <path
+                                d="M10 12h29c8 0 15 7 15 15v27H25c-8 0-15-6-15-14V12Z"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="4"
+                                stroke-linejoin="round"
+                            />
+
+                            <path
+                                d="M25 54V27c0-8 6-15 14-15"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="4"
+                                stroke-linecap="round"
+                            />
+
+                            <path
+                                d="M39 12c0 8 6 15 15 15"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="4"
+                                stroke-linecap="round"
+                            />
+                        </svg>
+                    </div>
+
+                    <span>Toschi<span>Book</span></span>
+                </div>
+
+                <div class="form-header">
+                    <h2>Crie sua conta</h2>
+                    <p>Preencha seus dados para começar</p>
+                </div>
+
+                <form id="registerForm" novalidate>
+
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="name">Nome completo</label>
+
+                            <div class="input-wrapper">
+                                <span class="input-icon">👤</span>
+
+                                <input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    placeholder="Seu nome completo"
+                                    autocomplete="name"
+                                >
+                            </div>
+
+                            <small class="error-message" id="nameError"></small>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="username">Usuário</label>
+
+                            <div class="input-wrapper">
+                                <span class="input-icon">@</span>
+
+                                <input
+                                    type="text"
+                                    id="username"
+                                    name="username"
+                                    placeholder="Nome de usuário"
+                                    autocomplete="username"
+                                >
+                            </div>
+
+                            <small class="error-message" id="usernameError"></small>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="email">E-mail</label>
+
+                        <div class="input-wrapper">
+                            <span class="input-icon">✉</span>
+
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="Digite seu e-mail"
+                                autocomplete="email"
+                            >
+                        </div>
+
+                        <small class="error-message" id="emailError"></small>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="registration">Matrícula ou código</label>
+
+                        <div class="input-wrapper">
+                            <span class="input-icon">#</span>
+
+                            <input
+                                type="text"
+                                id="registration"
+                                name="registration"
+                                placeholder="Digite sua matrícula"
+                            >
+                        </div>
+
+                        <small class="error-message" id="registrationError"></small>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="password">Senha</label>
+
+                            <div class="input-wrapper">
+                                <span class="input-icon">●</span>
+
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    placeholder="Crie uma senha"
+                                    autocomplete="new-password"
+                                >
+
+                                <button
+                                    type="button"
+                                    class="show-password"
+                                    data-target="password"
+                                >
+                                    Mostrar
+                                </button>
+                            </div>
+
+                            <small class="error-message" id="passwordError"></small>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="confirmPassword">Confirmar senha</label>
+
+                            <div class="input-wrapper">
+                                <span class="input-icon">●</span>
+
+                                <input
+                                    type="password"
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    placeholder="Repita a senha"
+                                    autocomplete="new-password"
+                                >
+
+                                <button
+                                    type="button"
+                                    class="show-password"
+                                    data-target="confirmPassword"
+                                >
+                                    Mostrar
+                                </button>
+                            </div>
+
+                            <small class="error-message" id="confirmPasswordError"></small>
+                        </div>
+                    </div>
+
+                    <label class="terms">
+                        <input type="checkbox" id="terms">
+                        <span>
+                            Aceito os termos de uso e a política de privacidade.
+                        </span>
+                    </label>
+
+                    <small class="error-message" id="termsError"></small>
+
+                    <button
+                        type="submit"
+                        class="register-button"
+                        id="registerButton"
+                    >
+                        <span class="button-text">Criar minha conta</span>
+                        <span class="loading-spinner"></span>
+                    </button>
+
+                    <p class="status-message" id="statusMessage"></p>
+
+                </form>
+
+                <div class="login-link">
+                    Já possui uma conta?
+                    <a href="index.html">Entrar</a>
+                </div>
+
+                <div class="form-footer">
+                    ToschiBook &copy; <span id="currentYear"></span>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <script src="/javascript/cadastro.js"></script>
+</body>
+</html>
