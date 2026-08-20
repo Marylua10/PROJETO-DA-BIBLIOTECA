@@ -80,7 +80,7 @@ togglePassword.addEventListener("click", () => {
     );
 });
 
-loginForm.addEventListener("submit", (event) => {
+loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     if (!validateForm()) {
@@ -90,31 +90,43 @@ loginForm.addEventListener("submit", (event) => {
     loginButton.disabled = true;
     loginButton.classList.add("loading");
 
-    /*
-     * Simulação de login.
-     * Substitua este trecho por uma chamada à sua API.
-     *
-     * Exemplo:
-     *
-     * fetch("/api/login", {
-     *     method: "POST",
-     *     headers: {
-     *         "Content-Type": "application/json"
-     *     },
-     *     body: JSON.stringify({
-     *         email: emailInput.value,
-     *         password: passwordInput.value
-     *     })
-     * });
-     */
+    try {
+        const resposta = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                identificador: emailInput.value.trim(),
+                senha: passwordInput.value,
+            }),
+        });
 
-    setTimeout(() => {
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+            statusMessage.textContent = dados.erro || "Erro ao realizar login.";
+            statusMessage.classList.add("error");
+            loginButton.disabled = false;
+            loginButton.classList.remove("loading");
+            return;
+        }
+
+        // Salva dados da sessão no localStorage para uso no frontend
+        localStorage.setItem("toschibook_usuario", JSON.stringify(dados.conta));
+
         statusMessage.textContent = "Login realizado com sucesso!";
         statusMessage.classList.add("success");
 
         // Redireciona para a tela inicial (dashboard)
-        window.location.href = "dashboard.html";
-    }, 1200);
+        setTimeout(() => {
+            window.location.href = "dashboard.html";
+        }, 600);
+
+    } catch (erro) {
+        statusMessage.textContent = "Erro de conexão com o servidor.";
+        statusMessage.classList.add("error");
+        loginButton.disabled = false;
+        loginButton.classList.remove("loading");
+    }
 });
 
 forgotPassword.addEventListener("click", (event) => {

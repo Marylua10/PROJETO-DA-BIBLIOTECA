@@ -1,13 +1,17 @@
 """Aplicação principal do sistema de biblioteca escolar."""
+import os
 from flask import Flask, send_from_directory
 from database import init_db
 from routes import api
+from auth import auth
 
 app = Flask(__name__, static_folder="html", static_url_path="")
 app.config["JSON_SORT_KEYS"] = False
+app.secret_key = os.environ.get("SECRET_KEY", "toschibook-dev-secret-2026")
 
 init_db()
 app.register_blueprint(api)
+app.register_blueprint(auth)
 
 
 @app.after_request
@@ -16,6 +20,7 @@ def adicionar_cors(resposta):
     resposta.headers["Access-Control-Allow-Origin"] = "*"
     resposta.headers["Access-Control-Allow-Headers"] = "Content-Type"
     resposta.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+    resposta.headers["Access-Control-Allow-Credentials"] = "true"
     return resposta
 
 

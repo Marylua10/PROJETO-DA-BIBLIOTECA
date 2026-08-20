@@ -117,7 +117,7 @@ document.querySelectorAll(".show-password").forEach((button) => {
     });
 });
 
-registerForm.addEventListener("submit", (event) => {
+registerForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     if (!validateForm()) {
@@ -128,38 +128,43 @@ registerForm.addEventListener("submit", (event) => {
     registerButton.disabled = true;
     registerButton.classList.add("loading");
 
-    /*
-     * Simulação de cadastro.
-     * Substitua este trecho pela chamada da API do sistema.
-     *
-     * Exemplo:
-     *
-     * fetch("/api/cadastro", {
-     *     method: "POST",
-     *     headers: {
-     *         "Content-Type": "application/json"
-     *     },
-     *     body: JSON.stringify({
-     *         nome: nameInput.value,
-     *         usuario: usernameInput.value,
-     *         email: emailInput.value,
-     *         matricula: registrationInput.value,
-     *         senha: passwordInput.value
-     *     })
-     * });
-     */
+    try {
+        const resposta = await fetch("/api/auth/cadastro", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                nome: nameInput.value.trim(),
+                usuario: usernameInput.value.trim(),
+                email: emailInput.value.trim(),
+                matricula: registrationInput.value.trim(),
+                senha: passwordInput.value,
+            }),
+        });
 
-    setTimeout(() => {
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+            setStatus(dados.erro || "Erro ao criar conta.", "error");
+            registerButton.disabled = false;
+            registerButton.classList.remove("loading");
+            return;
+        }
+
+        // Salva dados da sessão no localStorage
+        localStorage.setItem("toschibook_usuario", JSON.stringify(dados.conta));
+
+        setStatus("Conta criada com sucesso! Redirecionando...", "success");
+
+        // Redireciona para o dashboard após cadastro bem-sucedido
+        setTimeout(() => {
+            window.location.href = "dashboard.html";
+        }, 1000);
+
+    } catch (erro) {
+        setStatus("Erro de conexão com o servidor.", "error");
         registerButton.disabled = false;
         registerButton.classList.remove("loading");
-
-        setStatus(
-            "Cadastro realizado com sucesso!",
-            "success"
-        );
-
-        registerForm.reset();
-    }, 1200);
+    }
 });
 
 [

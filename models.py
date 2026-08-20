@@ -7,17 +7,23 @@ class Livro:
 
     @staticmethod
     def listar(termo=None):
-        """Lista livros, opcionalmente filtrando por título ou autor."""
+        """Lista livros com informação de disponibilidade."""
         conn = get_connection()
         try:
+            base = """
+                SELECT l.*,
+                       l.quantidade - COUNT(e.id) AS disponiveis
+                FROM livros l
+                LEFT JOIN emprestimos e
+                    ON e.livro_id = l.id AND e.status = 'ativo'
+            """
             if termo:
                 like = f"%{termo}%"
-                rows = conn.execute(
-                    "SELECT * FROM livros WHERE titulo LIKE ? OR autor LIKE ? ORDER BY titulo",
-                    (like, like),
-                ).fetchall()
+                query = base + " WHERE l.titulo LIKE ? OR l.autor LIKE ? GROUP BY l.id ORDER BY l.titulo"
+                rows = conn.execute(query, (like, like)).fetchall()
             else:
-                rows = conn.execute("SELECT * FROM livros ORDER BY titulo").fetchall()
+                query = base + " GROUP BY l.id ORDER BY l.titulo"
+                rows = conn.execute(query).fetchall()
             return [dict(row) for row in rows]
         finally:
             conn.close()
@@ -39,8 +45,8 @@ class Livro:
         try:
             cur = conn.execute(
                 """
-                INSERT INTO livros (titulo, autor, ano, categoria, quantidade)
-                VALUES (?, ?, ?, ?, ?)
+                INSERT INTO livros (titulo, autor, ano, categoria, quantidade, capa)
+                VALUES (?, ?, ?, ?, ?, ?)
                 """,
                 (
                     dados["titulo"],
@@ -48,6 +54,7 @@ class Livro:
                     dados.get("ano"),
                     dados.get("categoria"),
                     dados.get("quantidade", 1),
+                    dados.get("capa"),
                 ),
             )
             conn.commit()
@@ -60,21 +67,40 @@ class Livro:
         """Atualiza os dados de um livro."""
         conn = get_connection()
         try:
-            cur = conn.execute(
-                """
-                UPDATE livros
-                SET titulo = ?, autor = ?, ano = ?, categoria = ?, quantidade = ?
-                WHERE id = ?
-                """,
-                (
-                    dados["titulo"],
-                    dados["autor"],
-                    dados.get("ano"),
-                    dados.get("categoria"),
-                    dados.get("quantidade", 1),
-                    livro_id,
-                ),
-            )
+            # Se capa foi atualizada, inclui no UPDATE
+            if "capa" in dados:
+                cur = conn.execute(
+                    """
+                    UPDATE livros
+                    SET titulo = ?, autor = ?, ano = ?, categoria = ?, quantidade = ?, capa = ?
+                    WHERE id = ?
+                    """,
+                    (
+                        dados["titulo"],
+                        dados["autor"],
+                        dados.get("ano"),
+                        dados.get("categoria"),
+                        dados.get("quantidade", 1),
+                        dados["capa"],
+                        livro_id,
+                    ),
+                )
+            else:
+                cur = conn.execute(
+                    """
+                    UPDATE livros
+                    SET titulo = ?, autor = ?, ano = ?, categoria = ?, quantidade = ?
+                    WHERE id = ?
+                    """,
+                    (
+                        dados["titulo"],
+                        dados["autor"],
+                        dados.get("ano"),
+                        dados.get("categoria"),
+                        dados.get("quantidade", 1),
+                        livro_id,
+                    ),
+                )
             conn.commit()
             return cur.rowcount > 0
         finally:

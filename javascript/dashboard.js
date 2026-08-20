@@ -53,8 +53,8 @@ function formatarSiglaLivro(titulo) {
     return parte.join("") || "📕";
 }
 
-async function buscar(url) {
-    const resposta = await fetch(apiUrl(url));
+async function buscar(url, opcoes) {
+    const resposta = await fetch(apiUrl(url), opcoes);
 
     if (!resposta.ok) {
         throw new Error(`Erro ao acessar ${url} (${resposta.status})`);
@@ -133,7 +133,18 @@ function renderizarEmprestimos(emprestimos) {
         celulaData.className = "small-text";
         celulaData.textContent = formatarDataEmprestimo(emprestimo.data_emprestimo);
 
-        linha.append(celulaLivro, celulaAluno, celulaTurma, celulaData);
+        const celulaAcoes = document.createElement("td");
+        celulaAcoes.className = "table-actions";
+
+        const btnDevolver = document.createElement("button");
+        btnDevolver.type = "button";
+        btnDevolver.className = "btn btn-return btn-small";
+        btnDevolver.innerHTML = "⎌ Devolver";
+        btnDevolver.addEventListener("click", () => devolverLivro(emprestimo));
+
+        celulaAcoes.appendChild(btnDevolver);
+
+        linha.append(celulaLivro, celulaAluno, celulaTurma, celulaData, celulaAcoes);
         emprestimosBody.appendChild(linha);
     });
 }
@@ -181,6 +192,25 @@ function renderizarLivros(livros) {
         item.append(capa, meta, copias);
         livrosList.appendChild(item);
     });
+}
+
+async function devolverLivro(emprestimo) {
+    const confirmacao = confirm(
+        `Registrar a devolução de "${emprestimo.titulo}" para ${emprestimo.usuario_nome}?`
+    );
+
+    if (!confirmacao) {
+        return;
+    }
+
+    try {
+        await buscar(`/api/emprestimos/${emprestimo.id}/devolver`, {
+            method: "POST"
+        });
+        await atualizarDashboard();
+    } catch (erro) {
+        alert(erro.message || "Erro ao registrar devolução");
+    }
 }
 
 async function atualizarDashboard() {

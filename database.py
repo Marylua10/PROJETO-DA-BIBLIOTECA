@@ -48,8 +48,25 @@ def init_db():
                 FOREIGN KEY (livro_id) REFERENCES livros (id) ON DELETE CASCADE,
                 FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE
             );
+
+            CREATE TABLE IF NOT EXISTS contas (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome TEXT NOT NULL,
+                usuario TEXT UNIQUE NOT NULL,
+                email TEXT UNIQUE NOT NULL,
+                matricula TEXT,
+                senha_hash TEXT NOT NULL,
+                criado_em TEXT DEFAULT CURRENT_TIMESTAMP
+            );
             """
         )
+
+        # Adiciona coluna capa se não existir (migração segura)
+        try:
+            conn.execute("ALTER TABLE livros ADD COLUMN capa TEXT")
+        except Exception:
+            pass  # Coluna já existe
+
         conn.commit()
     finally:
         conn.close()

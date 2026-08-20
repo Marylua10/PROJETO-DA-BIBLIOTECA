@@ -1,17 +1,48 @@
 """Rotas da API do sistema de biblioteca escolar."""
-from flask import Blueprint, jsonify, request
+import os
+import uuid
+from pathlib import Path
+from flask import Blueprint, jsonify, request, send_from_directory
 from database import get_connection
 from models import Emprestimo, Livro, Usuario
 
 api = Blueprint("api", __name__, url_prefix="/api")
 
+UPLOAD_DIR = Path(__file__).parent / "uploads"
+UPLOAD_DIR.mkdir(exist_ok=True)
+
+EXTENSOES_PERMITIDAS = {".jpg", ".jpeg", ".png", ".gif", ".webp"}
+
 
 def campos_obrigatorios(dados, campos):
     """Valida que os campos obrigatórios existem e não estão vazios."""
-    ausentes = [c for c in campos if not dados.get(c, "").strip()]
+    ausentes = [c for c in campos if not str(dados.get(c, "")).strip()]
     if ausentes:
         return {"erro": f"Campos obrigatórios ausentes: {', '.join(ausentes)}"}
     return None
+
+
+def salvar_capa(arquivo):
+    """Salva o arquivo de capa e retorna o nome do arquivo."""
+    if not arquivo or not arquivo.filename:
+        return None
+
+    ext = Path(arquivo.filename).suffix.lower()
+    if ext not in EXTENSOES_PERMITIDAS:
+        return None
+
+    nome_arquivo = f"{uuid.uuid4().hex}{ext}"
+    arquivo.save(str(UPLOAD_DIR / nome_arquivo))
+    return nome_arquivo
+
+
+# ---------- Upload de capas ----------
+
+
+@api.get("/uploads/<path:nome_arquivo>")
+def servir_upload(nome_arquivo):
+    """Serve as capas de livros da pasta uploads/."""
+    return send_from_directory(str(UPLOAD_DIR), nome_arquivo)
 
 
 # ---------- Livros ----------
@@ -25,10 +56,33 @@ def listar_livros():
 
 @api.post("/livros")
 def criar_livro():
-    dados = request.get_json(silent=True) or {}
-    erro = campos_obrigatorios(dados, ["titulo", "autor"])
-    if erro:
-        return jsonify(erro), 400
+    # Aceita multipart (com capa) ou JSON
+    if request.content_type and "multipart" in request.content_type:
+        dados = {
+            "titulo": request.form.get("titulo", "").strip(),
+            "autor": request.form.get("autor", "").strip(),
+            "ano": request.form.get("ano") or None,
+            "categoria": request.form.get("categoria", "").strip(),
+            "quantidade": request.form.get("quantidade", "1"),
+        }
+
+        if not dados["titulo"] or not dados["autor"]:
+            return jsonify({"erro": "Campos obrigatórios ausentes: titulo, autor"}), 400
+
+        if dados["ano"]:
+            dados["ano"] = int(dados["ano"])
+        dados["quantidade"] = int(dados["quantidade"]) if dados["quantidade"] else 1
+
+        # Salva a capa se enviada
+        capa = request.files.get("capa")
+        dados["capa"] = salvar_capa(capa)
+
+    else:
+        dados = request.get_json(silent=True) or {}
+        erro = campos_obrigatorios(dados, ["titulo", "autor"])
+        if erro:
+            return jsonify(erro), 400
+
     novo_id = Livro.criar(dados)
     return jsonify({"id": novo_id, "mensagem": "Livro cadastrado com sucesso"}), 201
 
@@ -37,10 +91,34 @@ def criar_livro():
 def atualizar_livro(livro_id):
     if not Livro.buscar(livro_id):
         return jsonify({"erro": "Livro não encontrado"}), 404
-    dados = request.get_json(silent=True) or {}
-    erro = campos_obrigatorios(dados, ["titulo", "autor"])
-    if erro:
-        return jsonify(erro), 400
+
+    if request.content_type and "multipart" in request.content_type:
+        dados = {
+            "titulo": request.form.get("titulo", "").strip(),
+            "autor": request.form.get("autor", "").strip(),
+            "ano": request.form.get("ano") or None,
+            "categoria": request.form.get("categoria", "").strip(),
+            "quantidade": request.form.get("quantidade", "1"),
+        }
+
+        if not dados["titulo"] or not dados["autor"]:
+            return jsonify({"erro": "Campos obrigatórios ausentes: titulo, autor"}), 400
+
+        if dados["ano"]:
+            dados["ano"] = int(dados["ano"])
+        dados["quantidade"] = int(dados["quantidade"]) if dados["quantidade"] else 1
+
+        capa = request.files.get("capa")
+        nome_capa = salvar_capa(capa)
+        if nome_capa:
+            dados["capa"] = nome_capa
+
+    else:
+        dados = request.get_json(silent=True) or {}
+        erro = campos_obrigatorios(dados, ["titulo", "autor"])
+        if erro:
+            return jsonify(erro), 400
+
     Livro.atualizar(livro_id, dados)
     return jsonify({"mensagem": "Livro atualizado com sucesso"})
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +10,9 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/dashboard.css">
     <link rel="stylesheet" href="/css/paginas.css">
+    <link rel="stylesheet" href="/css/livros-cards.css">
 </head>
+
 <body class="dashboard-body">
 
     <div class="dashboard-layout">
@@ -19,12 +22,12 @@
             <div class="sidebar-brand logo">
                 <div class="logo-icon">
                     <svg viewBox="0 0 64 64" aria-hidden="true">
-                        <path d="M10 12h29c8 0 15 7 15 15v27H25c-8 0-15-6-15-14V12Z"
-                              fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
-                        <path d="M25 54V27c0-8 6-15 14-15"
-                              fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-                        <path d="M39 12c0 8 6 15 15 15"
-                              fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                        <path d="M10 12h29c8 0 15 7 15 15v27H25c-8 0-15-6-15-14V12Z" fill="none" stroke="currentColor"
+                            stroke-width="4" stroke-linejoin="round" />
+                        <path d="M25 54V27c0-8 6-15 14-15" fill="none" stroke="currentColor" stroke-width="4"
+                            stroke-linecap="round" />
+                        <path d="M39 12c0 8 6 15 15 15" fill="none" stroke="currentColor" stroke-width="4"
+                            stroke-linecap="round" />
                     </svg>
                 </div>
                 <span>Toschi<span>Book</span></span>
@@ -51,14 +54,14 @@
 
             <div class="sidebar-footer">
                 <div class="admin-chip">
-                    <span class="admin-avatar">A</span>
+                    <span class="admin-avatar">U</span>
                     <div class="admin-info">
-                        <strong>Administrador</strong>
+                        <strong id="adminNome">Usuário</strong>
                         <small>Biblioteca</small>
                     </div>
                 </div>
 
-                <a href="index.html" class="logout-link">
+                <a href="index.html" class="logout-link" id="logoutLink">
                     <span class="nav-icon">⎋</span>
                     Sair
                 </a>
@@ -84,41 +87,19 @@
             <div class="page-toolbar">
                 <div class="search-box">
                     <span class="search-icon">🔍</span>
-                    <input
-                        type="search"
-                        id="buscaLivro"
-                        placeholder="Buscar por título ou autor..."
-                        autocomplete="off"
-                    >
+                    <input type="search" id="buscaLivro" placeholder="Buscar por título ou autor..." autocomplete="off">
                 </div>
 
                 <span class="panel-badge" id="livrosCount">0 registros</span>
             </div>
 
-            <div class="panel">
-                <div class="panel-body panel-body-tight">
-                    <div class="empty-state" id="livrosEmpty" hidden>
-                        <span class="empty-icon">📚</span>
-                        <p>Nenhum livro encontrado.</p>
-                    </div>
-
-                    <div class="table-wrapper">
-                        <table class="data-table" id="livrosTable" hidden>
-                            <thead>
-                                <tr>
-                                    <th>Título</th>
-                                    <th>Autor</th>
-                                    <th>Ano</th>
-                                    <th>Categoria</th>
-                                    <th>Exemplares</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="livrosBody"></tbody>
-                        </table>
-                    </div>
-                </div>
+            <!-- Cards grid (substitui a tabela antiga) -->
+            <div class="empty-state" id="livrosEmpty" hidden>
+                <span class="empty-icon">📚</span>
+                <p>Nenhum livro encontrado.</p>
             </div>
+
+            <div class="books-card-grid" id="livrosGrid"></div>
 
         </div>
 
@@ -135,6 +116,18 @@
             <div class="modal-body">
                 <form id="formLivro" novalidate>
                     <input type="hidden" id="livroId">
+
+                    <!-- Upload de capa -->
+                    <div class="form-group full capa-upload-group">
+                        <label>Capa do livro</label>
+                        <div class="capa-upload-area" id="capaUploadArea">
+                            <input type="file" id="capaInput" accept="image/*" hidden>
+                            <div class="capa-preview" id="capaPreview">
+                                <span class="capa-placeholder">📷</span>
+                                <p>Clique ou arraste para adicionar a capa</p>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="form-grid">
                         <div class="form-group full">
@@ -173,6 +166,8 @@
     </div>
 
     <script src="/javascript/api.js"></script>
+    <script src="/javascript/auth.js"></script>
     <script src="/javascript/livros.js"></script>
 </body>
+
 </html>

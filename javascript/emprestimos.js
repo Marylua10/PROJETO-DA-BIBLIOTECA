@@ -129,8 +129,8 @@ function renderizarEmprestimos() {
 
         const btnDevolver = document.createElement("button");
         btnDevolver.type = "button";
-        btnDevolver.className = "btn btn-primary btn-small";
-        btnDevolver.textContent = "Devolver";
+        btnDevolver.className = "btn btn-return btn-small";
+        btnDevolver.innerHTML = "⎌ Devolver";
         btnDevolver.addEventListener("click", () => devolverLivro(emprestimo));
 
         celulaAcoes.appendChild(btnDevolver);
